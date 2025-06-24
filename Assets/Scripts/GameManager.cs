@@ -1,8 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using TMPro; // TextMeshProを使用するための名前空間
 
-// Cardクラスが別の名前空間にある場合は、以下のように名前空間を追加してください。
-// using YourNamespace;
 
 public class GameManager : MonoBehaviour
 {
@@ -10,11 +9,13 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, (string colorCode, List<string> colorNames)> cardData =
         new Dictionary<string, (string, List<string>)>
     {
-        { "01", ("#FF0000", new List<string> { "赤", "レッド" }) },
-        { "02", ("#00FF00", new List<string> { "緑", "グリーン" }) },
-        { "03", ("#0000FF", new List<string> { "青", "ブルー" }) },
-        { "04", ("#FFFF00", new List<string> { "黄", "イエロー" }) }
+        { "01", ("#FF0000", new List<string> { "RED", "Aka" }) },
+        { "02", ("#00FF00", new List<string> { "GREEN", "Midori" }) },
+        { "03", ("#0000FF", new List<string> { "BLUE", "Ao" }) },
+        { "04", ("#FFFF00", new List<string> { "YELLOW", "Ki" }) }
     };
+
+    [SerializeField] private TextMeshProUGUI colorNameText;
 
     void Start()
     {
@@ -70,7 +71,11 @@ public class GameManager : MonoBehaviour
         List<string> keys = new List<string>(cardData.Keys);
         int randomIndex = Random.Range(0, keys.Count);
         //色名を表示する
-        Debug.Log($"選ばれた色名: {cardData[keys[randomIndex]].colorNames[0]}");
+        Debug.Log($"正解に選ばれた色名: {cardData[keys[randomIndex]].colorNames[0]}");
+        //色名をTextMeshPro「ColorName」に表示する
+        colorNameText.text = cardData[keys[randomIndex]].colorNames[0]; // 色名を設定
+
+
         return keys[randomIndex];
 
 
