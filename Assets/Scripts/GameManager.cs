@@ -108,6 +108,11 @@ public class GameManager : MonoBehaviour
                     else
                     {
                         Debug.Log("不正解のカードがクリックされました。");
+                        //減点処理をここに追加
+                        int currentScore = int.Parse(scoreText.text);
+                        currentScore -= 5; // 例えば5点減点
+                        //if (currentScore < 0) currentScore = 0; // スコアがマイナスにならないように
+                        scoreText.text = currentScore.ToString(); // スコアを更新
                     }
                 }
             }
@@ -119,19 +124,16 @@ public class GameManager : MonoBehaviour
     private string SetColor()
     {
         List<string> keys = new List<string>(cardData.Keys);
+        if (keys.Count == 0)
+        {
+            colorNameText.text = ""; // 何も表示しない
+            Debug.Log("カードが残っていません。");
+            return null;
+        }
         int randomIndex = Random.Range(0, keys.Count);
-        //色名を表示する
         Debug.Log($"正解に選ばれた色名: {cardData[keys[randomIndex]].colorNames[0]}");
-        //色名をTextMeshPro「ColorName」に表示する
-        colorNameText.text = cardData[keys[randomIndex]].colorNames[0]; // 色名を設定
-
-
+        colorNameText.text = cardData[keys[randomIndex]].colorNames[0];
         return keys[randomIndex];
-
-
-
-
-
     }
 
 }
