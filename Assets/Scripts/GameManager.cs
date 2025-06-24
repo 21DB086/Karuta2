@@ -50,10 +50,33 @@ public class GameManager : MonoBehaviour
                 }
             }
         }
+
+
+        // 正解の色をランダムに決定
+        string correctColor = SetColor();
     }
 
     void Update()
     {
-        
+        //画面に表示された色名の色をしたカードをクリックすると点数が増える処理
+        // ここではクリックイベントの処理を行うことができます。
+
     }
+
+
+    //正解の色をランダムに決定する関数SetColor()
+    private string SetColor()
+    {
+        List<string> keys = new List<string>(cardData.Keys);
+        int randomIndex = Random.Range(0, keys.Count);
+        //色名を表示する
+        Debug.Log($"選ばれた色名: {cardData[keys[randomIndex]].colorNames[0]}");
+        return keys[randomIndex];
+
+
+
+
+
+    }
+
 }
