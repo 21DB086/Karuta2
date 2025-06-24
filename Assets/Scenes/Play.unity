@@ -227,6 +227,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c6029392ac7f9a34abe759557943b787, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  colorNameText: {fileID: 765614191}
 --- !u!4 &354418420
 Transform:
   m_ObjectHideFlags: 0
