@@ -16,6 +16,7 @@ public class GameManager : MonoBehaviour
     };
 
     [SerializeField] private TextMeshProUGUI colorNameText;
+    [SerializeField] private TextMeshProUGUI scoreText; // スコア表示用のTextMeshProUGUI
 
     void Start()
     {
@@ -59,9 +60,58 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        //画面に表示された色名の色をしたカードをクリックすると点数が増える処理
-        // ここではクリックイベントの処理を行うことができます。
-
+        // 画面に表示された色名の色をしたカードをクリックすると点数が増える処理
+        if (Input.GetMouseButtonDown(0))
+        {
+            Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+            if (hit.collider != null)
+            {
+                Debug.Log("Raycast2D hit: " + hit.collider.name);
+                Card clickedCard = hit.collider.GetComponent<Card>();
+                if (clickedCard != null)
+                {
+                    // カードの色名が正解の色名と一致するかチェック
+                    if (clickedCard.colorNames.Contains(colorNameText.text))
+                    {
+                        Debug.Log("正解のカードがクリックされました！");
+                        // 点数を増やす処理をここに追加
+                        int currentScore = int.Parse(scoreText.text);
+                        currentScore += 10; // 例えば10点加算
+                        scoreText.text = currentScore.ToString(); // スコアを更新
+                        // カードを非表示にする
+                        clickedCard.gameObject.SetActive(false);
+                        //cardDataからクリックされたカードのIDを削除
+                        //cardDataからクリックされたカードの色名を値に持つ項目を削除
+                        string removeKey = null;
+                        foreach (var pair in cardData)
+                        {
+                            if (pair.Value.colorNames.Contains(colorNameText.text))
+                            {
+                                removeKey = pair.Key;
+                                break;
+                            }
+                        }
+                        if (removeKey != null)
+                        {
+                            cardData.Remove(removeKey);
+                            //cardDataの項目が空になった場合、ゲームを終了する処理を追加
+                            if (cardData.Count == 0)
+                            {
+                                Debug.Log("全てのカードがクリアされました。ゲーム終了！");
+                                // ゲーム終了の処理をここに追加（例えば、ゲームオーバー画面を表示するなど）
+                            }
+                        }
+                        // 正解の色を再度ランダムに決定
+                        string newCorrectColor = SetColor();
+                    }
+                    else
+                    {
+                        Debug.Log("不正解のカードがクリックされました。");
+                    }
+                }
+            }
+        }
     }
 
 

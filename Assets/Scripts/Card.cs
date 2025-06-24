@@ -5,7 +5,7 @@ public class Card : MonoBehaviour
 {
     private string id;
     private string colorCode;
-    private List<string> colorNames;
+    public List<string> colorNames;
     
     public void SetId(string cardId)
     {
