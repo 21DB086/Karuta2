@@ -9,10 +9,10 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, (string colorCode, List<string> colorNames)> cardData =
         new Dictionary<string, (string, List<string>)>
     {
-        { "01", ("#FF0000", new List<string> { "RED", "Aka","FF0000" }) },
-        { "02", ("#00FF00", new List<string> { "GREEN", "Midori", "#00FF00"}) },
-        { "03", ("#0000FF", new List<string> { "BLUE", "Ao", "#0000FF"}) },
-        { "04", ("#FFFF00", new List<string> { "YELLOW", "Ki", "#FFFF00"}) }
+        { "01", ("#FF0000", new List<string> { "RED", "ê‘","#FF0000" }) },
+        { "02", ("#00FF00", new List<string> { "GREEN", "óŒ", "#00FF00"}) },
+        { "03", ("#0000FF", new List<string> { "BLUE", "ê¬", "#0000FF"}) },
+        { "04", ("#FFFF00", new List<string> { "YELLOW", "â©", "#FFFF00"}) }
     };
 
     [SerializeField] private TextMeshProUGUI colorNameText;
