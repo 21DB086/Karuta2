@@ -9,10 +9,10 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, (string colorCode, List<string> colorNames)> cardData =
         new Dictionary<string, (string, List<string>)>
     {
-        { "01", ("#FF0000", new List<string> { "RED", "Aka" }) },
-        { "02", ("#00FF00", new List<string> { "GREEN", "Midori" }) },
-        { "03", ("#0000FF", new List<string> { "BLUE", "Ao" }) },
-        { "04", ("#FFFF00", new List<string> { "YELLOW", "Ki" }) }
+        { "01", ("#FF0000", new List<string> { "RED", "Aka","FF0000" }) },
+        { "02", ("#00FF00", new List<string> { "GREEN", "Midori", "#00FF00"}) },
+        { "03", ("#0000FF", new List<string> { "BLUE", "Ao", "#0000FF"}) },
+        { "04", ("#FFFF00", new List<string> { "YELLOW", "Ki", "#FFFF00"}) }
     };
 
     [SerializeField] private TextMeshProUGUI colorNameText;
@@ -130,10 +130,18 @@ public class GameManager : MonoBehaviour
             Debug.Log("カードが残っていません。");
             return null;
         }
-        int randomIndex = Random.Range(0, keys.Count);
-        Debug.Log($"正解に選ばれた色名: {cardData[keys[randomIndex]].colorNames[0]}");
-        colorNameText.text = cardData[keys[randomIndex]].colorNames[0];
-        return keys[randomIndex];
+
+        // ランダムにカードIDを選択
+        int randomCardIndex = Random.Range(0, keys.Count);
+        var selectedCardData = cardData[keys[randomCardIndex]];
+
+        // 選ばれたカードの色名リストからランダムに1つの色名を選択
+        int randomColorNameIndex = Random.Range(0, selectedCardData.colorNames.Count);
+        string selectedColorName = selectedCardData.colorNames[randomColorNameIndex];
+
+        Debug.Log($"正解に選ばれた色名: {selectedColorName}");
+        colorNameText.text = selectedColorName; // ランダムに選ばれた色名を表示
+        return keys[randomCardIndex];
     }
 
 }
