@@ -233,7 +233,7 @@ MonoBehaviour:
   CardScoreText: {fileID: 1916752898}
   totalScoreText: {fileID: 666379132}
   mode: 0
-  timeLimitSeconds: 3
+  timeLimitSeconds: 180
   timerText: {fileID: 1333908401}
 --- !u!4 &354418420
 Transform:
