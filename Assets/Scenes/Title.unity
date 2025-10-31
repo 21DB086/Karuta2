@@ -602,7 +602,7 @@ GameObject:
   - component: {fileID: 1620182583}
   - component: {fileID: 1620182582}
   m_Layer: 5
-  m_Name: StartHard
+  m_Name: StartTimeAtack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -697,7 +697,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.66842633, g: 1, b: 0.504717, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -915,7 +915,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: "\u30BF\u30A4\u30E0\u30A2\u30BF\u30C3\u30AF"
+  m_text: "\u30BF\u30A4\u30E0\u30A2\u30BF\u30C3\u30AF\u30E2\u30FC\u30C9"
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 4a2c28bd9ce3c7e4db7a2089d2b13113, type: 2}
   m_sharedMaterial: {fileID: -2611832816415847196, guid: 4a2c28bd9ce3c7e4db7a2089d2b13113, type: 2}
@@ -1102,7 +1102,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Material: {fileID: 0}
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_Color: {r: 0.6431373, g: 0.9607844, b: 0.48627454, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1

@@ -83,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI totalScoreText; // 総合スコア表示用のTextMeshProUGUI
 
-    // 表示モード: 0 = ランダム、1 = 2番目の色名
+    // 表示モード: 0 = ランダム、1 = 2番目の色名リスト
     public int mode = 0; // 0 = ランダム、1 = 2番目の色名
 
     // 制限時間 (秒) を 180 秒に設定
@@ -109,8 +109,9 @@ public class GameManager : MonoBehaviour
 
         // タイマー初期化（180秒）
         timeRemaining = timeLimitSeconds;
-        isTimerRunning = true;
-        UpdateTimerText();
+        isTimerRunning = (mode != 1); // mode==1ならカウントダウンしない
+        if (mode != 1) UpdateTimerText();
+        else if (timerText != null) timerText.text = ""; // カウント表示しない
 
         // 64種類のIDリスト
         List<string> allCardIds = new List<string>();
@@ -236,10 +237,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (gameEnded) return; // ゲームが終了していたら何もしない
+        if (gameEnded) return;
 
         // タイマー処理
-        if (isTimerRunning)
+        if (isTimerRunning && mode != 1)
         {
             timeRemaining -= Time.deltaTime;
             UpdateTimerText();
@@ -249,8 +250,7 @@ public class GameManager : MonoBehaviour
                 isTimerRunning = false;
                 timeRemaining = 0f;
                 Debug.Log("時間切れ！ ゲーム終了。");
-                // 時間切れの処理をここに追加（例えば、ゲームオーバー画面を表示するなど）
-                EndGame(false); // クリアせず終了
+                EndGame(false);
             }
         }
 
@@ -333,8 +333,8 @@ public class GameManager : MonoBehaviour
 
         string selectedColorName;
 
-        // modeが1なら2番目（index=1）を優先表示。存在しない場合はフォールバックでランダム。
-        if (mode == 1 && selectedCardData.colorNames.Count > 1)
+        // 2番目（index=1）を優先表示。存在しない場合はフォールバックでランダム。
+        if (selectedCardData.colorNames.Count > 1)
         {
             selectedColorName = selectedCardData.colorNames[1];
         }
@@ -345,7 +345,7 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"正解に選ばれた色名: {selectedColorName}");
-        colorNameText.text = selectedColorName; // ランダムに選ばれた色名を表示
+        colorNameText.text = selectedColorName; // 2番目の色名を表示
         return keys[randomCardIndex];
     }
 
@@ -368,21 +368,19 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnded) return;
 
-        // 現在スコア取得（安全に）
         int baseScore = 0;
         int.TryParse(scoreText.text, out baseScore);
 
-        totalScore = baseScore; // ゲーム中のスコアを基に
+        totalScore = baseScore;
 
         if (clearedAll)
         {
-            // 残り秒をボーナス（切り上げ）
-            int bonusSeconds = Mathf.CeilToInt(Mathf.Max(0f, timeRemaining));
-            totalScore += bonusSeconds; // 残り秒を加算したスコアをtotalScore変数に格納
+            int bonusSeconds = (mode == 1) ? 0 : Mathf.CeilToInt(Mathf.Max(0f, timeRemaining));
+            totalScore += bonusSeconds;
             Debug.Log($"全カードクリア。残り秒ボーナス: {bonusSeconds} -> 最終スコア: {totalScore}");
-            // タイマーを停止し、残り時間を表示したままにする
             isTimerRunning = false;
-            UpdateTimerText(); // 現在の残り時間を表示
+            if (mode != 1) UpdateTimerText();
+            else if (timerText != null) timerText.text = "";
         }
         else
         {
@@ -390,19 +388,22 @@ public class GameManager : MonoBehaviour
             if (timerText != null) timerText.text = "00:00";
         }
 
+        if (mode != 1)
+        {
+            if (TimeScoreText != null) TimeScoreText.text = "Time Score: " + ((mode == 1) ? "0" : Mathf.CeilToInt(Mathf.Max(0f, timeRemaining)).ToString());
+            if (CardScoreText != null) CardScoreText.text = "Card Score: " + baseScore.ToString();
+            if (totalScoreText != null) totalScoreText.text = "Total Score: " + totalScore.ToString();
+        }
+        else
+        {
+            // mode==1のときはscoreTextのみ "Score: " を付けて表示
+            if (scoreText != null) scoreText.text = "Score: " + baseScore.ToString();
+            if (TimeScoreText != null) TimeScoreText.text = "";
+            if (CardScoreText != null) CardScoreText.text = "";
+            if (totalScoreText != null) totalScoreText.text = "";
+        }
 
-        ////
-        if (TimeScoreText != null) TimeScoreText.text = "Time Score: " + Mathf.CeilToInt(Mathf.Max(0f, timeRemaining)).ToString();
-
-        if (CardScoreText != null) CardScoreText.text = "Card Score: " + baseScore.ToString();
-
-        // 総合スコアをtotalScoreTextに表示（ゲーム中のscoreTextは変更せず）
-        if (totalScoreText != null) totalScoreText.text = "Total Score: " + totalScore.ToString();
-
-
-        // ゲーム終了フラグ・停止処理
         gameEnded = true;
-
         // 必要ならここで結果画面遷移やリザルト処理を呼ぶ
         // ShowResult(totalScore, clearedAll);
     }
