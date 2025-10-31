@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro; // TextMeshProを使用するための名前空間
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -118,13 +119,81 @@ public class GameManager : MonoBehaviour
             allCardIds.Add(i.ToString("D2"));
         }
 
-        // シャッフルして32枚分だけ選択
-        for (int i = 0; i < allCardIds.Count; i++)
+        // --- ここから: カラーコードが重複しないように32件選ぶロジック ---
+        // カラーコードごとにIDをグループ化
+        var codeToIds = new Dictionary<string, List<string>>();
+        foreach (var id in allCardIds)
         {
-            int rnd = Random.Range(i, allCardIds.Count);
-            (allCardIds[i], allCardIds[rnd]) = (allCardIds[rnd], allCardIds[i]);
+            if (!cardData.TryGetValue(id, out var tuple)) continue;
+            string code = tuple.colorCode ?? string.Empty;
+            if (!codeToIds.ContainsKey(code)) codeToIds[code] = new List<string>();
+            codeToIds[code].Add(id);
         }
-        List<string> cardIds = allCardIds.GetRange(0, 32);
+
+        // 各カラーコードからランダムに1つずつ取り出す（これでカラーコードはユニークになる）
+        var uniqueIds = new List<string>();
+        foreach (var kv in codeToIds)
+        {
+            var list = kv.Value;
+            int idx = Random.Range(0, list.Count);
+            uniqueIds.Add(list[idx]);
+        }
+
+        // ユニーク候補をシャッフル
+        for (int i = 0; i < uniqueIds.Count; i++)
+        {
+            int rnd = Random.Range(i, uniqueIds.Count);
+            (uniqueIds[i], uniqueIds[rnd]) = (uniqueIds[rnd], uniqueIds[i]);
+        }
+
+        List<string> cardIds = new List<string>();
+
+        if (uniqueIds.Count >= 32)
+        {
+            // ユニークなカラーコードが32以上あればその中から32件取る
+            cardIds = uniqueIds.GetRange(0, 32);
+        }
+        else
+        {
+            // ユニーク数が足りない場合は残りを他のIDでランダム補充（ここで重複を許可して埋める）
+            cardIds.AddRange(uniqueIds);
+            // 残り候補（重複していない残り)
+            var remainingCandidates = new List<string>(allCardIds);
+            remainingCandidates.RemoveAll(id => cardIds.Contains(id));
+
+            // シャッフル remainingCandidates
+            for (int i = 0; i < remainingCandidates.Count; i++)
+            {
+                int rnd = Random.Range(i, remainingCandidates.Count);
+                (remainingCandidates[i], remainingCandidates[rnd]) = (remainingCandidates[rnd], remainingCandidates[i]);
+            }
+
+            int need = 32 - cardIds.Count;
+            for (int i = 0; i < need && i < remainingCandidates.Count; i++)
+            {
+                cardIds.Add(remainingCandidates[i]);
+            }
+
+            // 万が一まだ足りなければ、既存IDの中から繰り返し追加（極めて稀）
+            int refillIndex = 0;
+            while (cardIds.Count < 32)
+            {
+                if (remainingCandidates.Count > 0)
+                {
+                    cardIds.Add(remainingCandidates[refillIndex % remainingCandidates.Count]);
+                }
+                else if (uniqueIds.Count > 0)
+                {
+                    cardIds.Add(uniqueIds[refillIndex % uniqueIds.Count]);
+                }
+                else
+                {
+                    break;
+                }
+                refillIndex++;
+            }
+        }
+        // --- ここまで ---
 
         // cardDataを画面に表示する32枚分だけに絞る
         var newCardData = new Dictionary<string, (string colorCode, List<string> colorNames)>();
