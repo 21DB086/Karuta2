@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using TMPro; // TextMeshProを使用するための名前空間
+using System.Linq;
 
 public class GameManager : MonoBehaviour
 {
@@ -8,70 +9,70 @@ public class GameManager : MonoBehaviour
     private Dictionary<string, (string colorCode, List<string> colorNames)> cardData =
         new Dictionary<string, (string, List<string>)>
     {
-        { "01", ("#FF0000", new List<string> { "RED", "赤", "#FF0000" }) },
-        { "02", ("#00FF00", new List<string> { "GREEN", "緑", "#00FF00" }) },
-        { "03", ("#0000FF", new List<string> { "BLUE", "青", "#0000FF" }) },
-        { "04", ("#FFFF00", new List<string> { "YELLOW", "黄", "#FFFF00" }) },
-        { "05", ("#FF00FF", new List<string> { "MAGENTA", "紫", "#FF00FF" }) },
-        { "06", ("#00FFFF", new List<string> { "CYAN", "水色", "#00FFFF" }) },
-        { "07", ("#FFA500", new List<string> { "ORANGE", "オレンジ", "#FFA500" }) },
-        { "08", ("#808080", new List<string> { "GRAY", "グレー", "#808080" }) },
-        { "09", ("#800000", new List<string> { "MAROON", "えんじ", "#800000" }) },
-        { "10", ("#008000", new List<string> { "DARK GREEN", "深緑", "#008000" }) },
-        { "11", ("#000080", new List<string> { "NAVY", "紺", "#000080" }) },
-        { "12", ("#808000", new List<string> { "OLIVE", "オリーブ", "#808000" }) },
-        { "13", ("#800080", new List<string> { "PURPLE", "パープル", "#800080" }) },
-        { "14", ("#008080", new List<string> { "TEAL", "ティール", "#008080" }) },
-        { "15", ("#C0C0C0", new List<string> { "SILVER", "シルバー", "#C0C0C0" }) },
-        { "16", ("#FFD700", new List<string> { "GOLD", "ゴールド", "#FFD700" }) },
-        { "17", ("#DC143C", new List<string> { "CRIMSON", "クリムゾン", "#DC143C" }) },
-        { "18", ("#ADFF2F", new List<string> { "GREEN YELLOW", "黄緑", "#ADFF2F" }) },
-        { "19", ("#1E90FF", new List<string> { "DODGER BLUE", "ドジャーブルー", "#1E90FF" }) },
-        { "20", ("#FF69B4", new List<string> { "HOT PINK", "ホットピンク", "#FF69B4" }) },
-        { "21", ("#A52A2A", new List<string> { "BROWN", "茶色", "#A52A2A" }) },
-        { "22", ("#7FFF00", new List<string> { "CHARTREUSE", "シャルトリューズ", "#7FFF00" }) },
-        { "23", ("#00CED1", new List<string> { "DARK TURQUOISE", "ターコイズ", "#00CED1" }) },
-        { "24", ("#B8860B", new List<string> { "DARK GOLDENROD", "ダークゴールド", "#B8860B" }) },
-        { "25", ("#B22222", new List<string> { "FIREBRICK", "レンガ色", "#B22222" }) },
-        { "26", ("#228B22", new List<string> { "FOREST GREEN", "フォレストグリーン", "#228B22" }) },
-        { "27", ("#DAA520", new List<string> { "GOLDENROD", "ゴールデンロッド", "#DAA520" }) },
-        { "28", ("#4B0082", new List<string> { "INDIGO", "インディゴ", "#4B0082" }) },
-        { "29", ("#F08080", new List<string> { "LIGHT CORAL", "ライトコーラル", "#F08080" }) },
-        { "30", ("#20B2AA", new List<string> { "LIGHT SEA GREEN", "ライトシーグリーン", "#20B2AA" }) },
-        { "31", ("#87CEFA", new List<string> { "LIGHT SKY BLUE", "ライトスカイブルー", "#87CEFA" }) },
-        { "32", ("#778899", new List<string> { "LIGHT SLATE GRAY", "ライトスレートグレー", "#778899" }) },
-        { "33", ("#FFB6C1", new List<string> { "LIGHT PINK", "ライトピンク", "#FFB6C1" }) },
-        { "34", ("#8B0000", new List<string> { "DARK RED", "ダークレッド", "#8B0000" }) },
-        { "35", ("#006400", new List<string> { "DARK GREEN2", "ダークグリーン2", "#006400" }) },
-        { "36", ("#00008B", new List<string> { "DARK BLUE", "ダークブルー", "#00008B" }) },
-        { "37", ("#BDB76B", new List<string> { "DARK KHAKI", "ダークカーキ", "#BDB76B" }) },
-        { "38", ("#8B008B", new List<string> { "DARK MAGENTA", "ダークマゼンタ", "#8B008B" }) },
-        { "39", ("#556B2F", new List<string> { "DARK OLIVE GREEN", "ダークオリーブグリーン", "#556B2F" }) },
-        { "40", ("#FF8C00", new List<string> { "DARK ORANGE", "ダークオレンジ", "#FF8C00" }) },
-        { "41", ("#9932CC", new List<string> { "DARK ORCHID", "ダークオーキッド", "#9932CC" }) },
-        { "42", ("#8FBC8F", new List<string> { "DARK SEA GREEN", "ダークシーグリーン", "#8FBC8F" }) },
-        { "43", ("#483D8B", new List<string> { "DARK SLATE BLUE", "ダークスレートブルー", "#483D8B" }) },
-        { "44", ("#2F4F4F", new List<string> { "DARK SLATE GRAY", "ダークスレートグレー", "#2F4F4F" }) },
-        { "45", ("#00BFFF", new List<string> { "DEEP SKY BLUE", "ディープスカイブルー", "#00BFFF" }) },
-        { "46", ("#696969", new List<string> { "DIM GRAY", "ディムグレー", "#696969" }) },
-        { "47", ("#1E90FF", new List<string> { "DODGER BLUE2", "ドジャーブルー2", "#1E90FF" }) },
-        { "48", ("#B22222", new List<string> { "FIREBRICK2", "レンガ色2", "#B22222" }) },
-        { "49", ("#FFFAF0", new List<string> { "FLORAL WHITE", "フローラルホワイト", "#FFFAF0" }) },
-        { "50", ("#228B22", new List<string> { "FOREST GREEN2", "フォレストグリーン2", "#228B22" }) },
-        { "51", ("#DCDCDC", new List<string> { "GAINSBORO", "ゲインズボロ", "#DCDCDC" }) },
-        { "52", ("#F8F8FF", new List<string> { "GHOST WHITE", "ゴーストホワイト", "#F8F8FF" }) },
-        { "53", ("#FFD700", new List<string> { "GOLD2", "ゴールド2", "#FFD700" }) },
-        { "54", ("#DAA520", new List<string> { "GOLDENROD2", "ゴールデンロッド2", "#DAA520" }) },
-        { "55", ("#808080", new List<string> { "GRAY2", "グレー2", "#808080" }) },
-        { "56", ("#008000", new List<string> { "GREEN2", "グリーン2", "#008000" }) },
-        { "57", ("#ADFF2F", new List<string> { "GREEN YELLOW2", "黄緑2", "#ADFF2F" }) },
-        { "58", ("#F0FFF0", new List<string> { "HONEYDEW", "ハニーデュー", "#F0FFF0" }) },
-        { "59", ("#FF69B4", new List<string> { "HOT PINK2", "ホットピンク2", "#FF69B4" }) },
-        { "60", ("#CD5C5C", new List<string> { "INDIAN RED", "インディアンレッド", "#CD5C5C" }) },
-        { "61", ("#4B0082", new List<string> { "INDIGO2", "インディゴ2", "#4B0082" }) },
-        { "62", ("#FFFFF0", new List<string> { "IVORY", "アイボリー", "#FFFFF0" }) },
-        { "63", ("#F0E68C", new List<string> { "KHAKI", "カーキ", "#F0E68C" }) },
-        { "64", ("#E6E6FA", new List<string> { "LAVENDER", "ラベンダー", "#E6E6FA" }) }
+        { "01", ("#EE0026", new List<string> { "4R4.5/14", "カーマイン", "#EE0026" }) },
+        { "02", ("#FD1A1C", new List<string> { "7R5/14", "スカーレット", "#FD1A1C" }) },
+        { "03", ("#FE4118", new List<string> { "6R5.5/14", "朱色", "#FE4118" }) },
+        { "04", ("#FE4118", new List<string> { "6R5.5/14", "バーミリオン", "#FE4118" }) },
+        { "05", ("#F39800", new List<string> { "8YR7.5/13", "マリーゴールド", "#F39800" }) },
+        { "06", ("#FFCC00", new List<string> { "6YR6.5/13", "山吹色", "#FFCC00" }) },
+        { "07", ("#CCE700", new List<string> { "8Y8/12", "レモンイエロー", "#CCE700" }) },
+        { "08", ("#009CD1", new List<string> { "7.5B6/10", "シアン", "#009CD1" }) },
+        { "09", ("#0068B7", new List<string> { "3PB4/10", "コバルトブルー", "#0068B7" }) },
+        { "10", ("#1D1A88", new List<string> { "7.5PB3.5/11", "ウルトラマリンブルー", "#1D1A88" }) },
+        { "11", ("#1D1A88", new List<string> { "7.5PB3.5/11", "瑠璃色", "#1D1A88" }) },
+        { "12", ("#1D1A88", new List<string> { "7.5PB3.5/11", "群青色", "#1D1A88" }) },
+        { "13", ("#1D1A88", new List<string> { "7.5PB3.5/11", "杜若色", "#1D1A88" }) },
+        { "14", ("#281285", new List<string> { "9PB3.5/13", "桔梗色", "#281285" }) },
+        { "15", ("#714F9D", new List<string> { "2.5P4/11", "バイオレット", "#714F9D" }) },
+        { "16", ("#56007D", new List<string> { "7P3.5/11.5", "モーブ", "#56007D" }) },
+        { "17", ("#E55A9B", new List<string> { "C3RP5/14", "牡丹色", "#E55A9B" }) },
+        { "18", ("#AF0065", new List<string> { "6RP4/14", "マゼンタ", "#AF0065" }) },
+        { "19", ("#F9344C", new List<string> { "4R6.0/12.0", "韓紅花", "#F9344C" }) },
+        { "20", ("#F9344C", new List<string> { "4R6.0/12.0", "珊瑚色", "#F9344C" }) },
+        { "21", ("#FFF231", new List<string> { "5Y8.5/11.0", "カナリヤ", "#FFF231" }) },
+        { "22", ("#aacf53", new List<string> { "4GY6.5/9", "萌黄", "#aacf53" }) },
+        { "23", ("#33A65E", new List<string> { "4G7/9.0", "エメラルドグリーン", "#33A65E" }) },
+        { "24", ("#33A65E", new List<string> { "4G7/9.0", "コバルトグリーン", "#33A65E" }) },
+        { "25", ("#33A65E", new List<string> { "4G7/9.0", "若竹色", "#33A65E" }) },
+        { "26", ("#1D86AE", new List<string> { "5B5.5/8.5", "ターコイズブルー", "#1D86AE" }) },
+        { "27", ("#DF4C94", new List<string> { "7RP5/14", "パープル", "#DF4C94" }) },
+        { "28", ("#DF4C94", new List<string> { "7RP5/14", "菖蒲色", "#DF4C94" }) },
+        { "29", ("#9E002C", new List<string> { "4R3.5/11.5", "茜色", "#9E002C" }) },
+        { "30", ("#04436D", new List<string> { "5B3.0/7.0", "マリーブルー", "#04436D" }) },
+        { "31", ("#073E73", new List<string> { "3PB2.5/9.5", "藍色", "#073E73" }) },
+        { "32", ("#740050", new List<string> { "10RP 3.0/9", "ワインレッド", "#740050" }) },
+        { "33", ("#FA7482", new List<string> { "2.5R 6.5/7.5", "紅梅色", "#FA7482" }) },
+        { "34", ("#FB8072", new List<string> { "8R 7.5/7.5", "サーモンピンク", "#FB8072" }) },
+        { "35", ("#67B2CA", new List<string> { "6B 8/4", "空色", "#67B2CA" }) },
+        { "36", ("#67B2CA", new List<string> { "6B 8/4", "スカイブルー", "#67B2CA" }) },
+        { "37", ("#CCBA48", new List<string> { "2Y 7.5/7", "ブロンド", "#CCBA48" }) },
+        { "38", ("#CCBA48", new List<string> { "2Y 7.5/7", "芥子色", "#CCBA48" }) },
+        { "39", ("#66AC78", new List<string> { "7.5G 6.5/4", "青磁色", "#66AC78" }) },
+        { "40", ("#8C5588", new List<string> { "5P 6/5", "ラベンダー", "#8C5588" }) },
+        { "41", ("#B25938", new List<string> { "10YR 6/7.5", "黄土色", "#B25938" }) },
+        { "42", ("#747E47", new List<string> { "3GY 5.5/5.5", "松葉色", "#747E47" }) },
+        { "43", ("#5A804B", new List<string> { "4G 5.0/4.5", "ビリジアン", "#5A804B" }) },
+        { "44", ("#743526", new List<string> { "8R3.5/7", "栗色", "#743526" }) },
+        { "45", ("#743526", new List<string> { "8R3.5/7", "煉瓦色", "#743526" }) },
+        { "46", ("#695B18", new List<string> { "5Y4.0/5.5", "カーキー", "#695B18" }) },
+        { "47", ("#695B18", new List<string> { "5Y4.0/5.5", "オリーブ", "#695B18" }) },
+        { "48", ("#56561A", new List<string> { "3GY3.5/5.0", "オリーブグリーン", "#56561A" }) },
+        { "49", ("#16344F", new List<string> { "5PB3.0/4.0", "ネービーブルー", "#16344F" }) },
+        { "50", ("#FBB4C4", new List<string> { "4R8.5/4", "ピーチ", "#FBB4C4" }) },
+        { "51", ("#FBB4C4", new List<string> { "4R8.5/4", "ベビーピンク", "#FBB4C4" }) },
+        { "52", ("#FEE6AA", new List<string> { "5YR8/5", "生成り色", "#FEE6AA" }) },
+        { "53", ("#FFFFB3", new List<string> { "5Y8.5/3.5", "クリームイエロー", "#FFFFB3" }) },
+        { "54", ("#B3CDE3", new List<string> { "10B7.5/3", "ベビーブルー", "#B3CDE3" }) },
+        { "55", ("#fdeeef", new List<string> { "10RP9/2.5", "桜色", "#fdeeef" }) },
+        { "56", ("#eedcb3", new List<string> { "10YR7/2.5", "ベージュ", "#eedcb3" }) },
+        { "57", ("#f8f5e3", new List<string> { "2.5Y8.5/1.5", "アイボリー", "#f8f5e3" }) },
+        { "58", ("#928c36", new List<string> { "1GY4.5/3.5", "鶯色", "#928c36" }) },
+        { "59", ("#3A2C2E", new List<string> { "2.5R2.5/3", "ボルドー", "#3A2C2E" }) },
+        { "60", ("#3A2C2A", new List<string> { "10R2.5/2.5", "チョコレート", "#3A2C2A" }) },
+        { "61", ("#463B34", new List<string> { "10YR2.5/2", "セピア", "#463B34" }) },
+        { "62", ("#2E2A31", new List<string> { "7P1.5/1.5", "茄子紺", "#2E2A31" }) },
+        { "63", ("#afafb0", new List<string> { "N6.5", "シルバーグレイ", "#afafb0" }) },
+        { "64", ("#4e4449", new List<string> { "5P3/1", "チャコールグレイ", "#4e4449" }) }
     };
 
     [SerializeField] private TextMeshProUGUI colorNameText;
@@ -82,7 +83,7 @@ public class GameManager : MonoBehaviour
 
     [SerializeField] private TextMeshProUGUI totalScoreText; // 総合スコア表示用のTextMeshProUGUI
 
-    // 表示モード: 0 = ランダム、1 = 2番目の色名
+    // 表示モード: 0 = ランダム、1 = 2番目の色名リスト
     public int mode = 0; // 0 = ランダム、1 = 2番目の色名
 
     // 制限時間 (秒) を 180 秒に設定
@@ -108,8 +109,9 @@ public class GameManager : MonoBehaviour
 
         // タイマー初期化（180秒）
         timeRemaining = timeLimitSeconds;
-        isTimerRunning = true;
-        UpdateTimerText();
+        isTimerRunning = (mode != 1); // mode==1ならカウントダウンしない
+        if (mode != 1) UpdateTimerText();
+        else if (timerText != null) timerText.text = ""; // カウント表示しない
 
         // 64種類のIDリスト
         List<string> allCardIds = new List<string>();
@@ -118,13 +120,81 @@ public class GameManager : MonoBehaviour
             allCardIds.Add(i.ToString("D2"));
         }
 
-        // シャッフルして32枚分だけ選択
-        for (int i = 0; i < allCardIds.Count; i++)
+        // --- ここから: カラーコードが重複しないように32件選ぶロジック ---
+        // カラーコードごとにIDをグループ化
+        var codeToIds = new Dictionary<string, List<string>>();
+        foreach (var id in allCardIds)
         {
-            int rnd = Random.Range(i, allCardIds.Count);
-            (allCardIds[i], allCardIds[rnd]) = (allCardIds[rnd], allCardIds[i]);
+            if (!cardData.TryGetValue(id, out var tuple)) continue;
+            string code = tuple.colorCode ?? string.Empty;
+            if (!codeToIds.ContainsKey(code)) codeToIds[code] = new List<string>();
+            codeToIds[code].Add(id);
         }
-        List<string> cardIds = allCardIds.GetRange(0, 32);
+
+        // 各カラーコードからランダムに1つずつ取り出す（これでカラーコードはユニークになる）
+        var uniqueIds = new List<string>();
+        foreach (var kv in codeToIds)
+        {
+            var list = kv.Value;
+            int idx = Random.Range(0, list.Count);
+            uniqueIds.Add(list[idx]);
+        }
+
+        // ユニーク候補をシャッフル
+        for (int i = 0; i < uniqueIds.Count; i++)
+        {
+            int rnd = Random.Range(i, uniqueIds.Count);
+            (uniqueIds[i], uniqueIds[rnd]) = (uniqueIds[rnd], uniqueIds[i]);
+        }
+
+        List<string> cardIds = new List<string>();
+
+        if (uniqueIds.Count >= 32)
+        {
+            // ユニークなカラーコードが32以上あればその中から32件取る
+            cardIds = uniqueIds.GetRange(0, 32);
+        }
+        else
+        {
+            // ユニーク数が足りない場合は残りを他のIDでランダム補充（ここで重複を許可して埋める）
+            cardIds.AddRange(uniqueIds);
+            // 残り候補（重複していない残り)
+            var remainingCandidates = new List<string>(allCardIds);
+            remainingCandidates.RemoveAll(id => cardIds.Contains(id));
+
+            // シャッフル remainingCandidates
+            for (int i = 0; i < remainingCandidates.Count; i++)
+            {
+                int rnd = Random.Range(i, remainingCandidates.Count);
+                (remainingCandidates[i], remainingCandidates[rnd]) = (remainingCandidates[rnd], remainingCandidates[i]);
+            }
+
+            int need = 32 - cardIds.Count;
+            for (int i = 0; i < need && i < remainingCandidates.Count; i++)
+            {
+                cardIds.Add(remainingCandidates[i]);
+            }
+
+            // 万が一まだ足りなければ、既存IDの中から繰り返し追加（極めて稀）
+            int refillIndex = 0;
+            while (cardIds.Count < 32)
+            {
+                if (remainingCandidates.Count > 0)
+                {
+                    cardIds.Add(remainingCandidates[refillIndex % remainingCandidates.Count]);
+                }
+                else if (uniqueIds.Count > 0)
+                {
+                    cardIds.Add(uniqueIds[refillIndex % uniqueIds.Count]);
+                }
+                else
+                {
+                    break;
+                }
+                refillIndex++;
+            }
+        }
+        // --- ここまで ---
 
         // cardDataを画面に表示する32枚分だけに絞る
         var newCardData = new Dictionary<string, (string colorCode, List<string> colorNames)>();
@@ -150,6 +220,9 @@ public class GameManager : MonoBehaviour
             Vector3 spawnPosition = new Vector3(startX + col * intervalX, startY + row * intervalY, 0);
             GameObject cardInstance = Instantiate(cardPrefab, spawnPosition, Quaternion.identity);
 
+            cardInstance.transform.localScale = new Vector3(1f, 1.5f, 1f);
+
+
             Card cardScript = cardInstance.GetComponent<Card>();
             if (cardScript != null)
             {
@@ -167,10 +240,10 @@ public class GameManager : MonoBehaviour
 
     void Update()
     {
-        if (gameEnded) return; // ゲームが終了していたら何もしない
+        if (gameEnded) return;
 
         // タイマー処理
-        if (isTimerRunning)
+        if (isTimerRunning && mode != 1)
         {
             timeRemaining -= Time.deltaTime;
             UpdateTimerText();
@@ -180,8 +253,7 @@ public class GameManager : MonoBehaviour
                 isTimerRunning = false;
                 timeRemaining = 0f;
                 Debug.Log("時間切れ！ ゲーム終了。");
-                // 時間切れの処理をここに追加（例えば、ゲームオーバー画面を表示するなど）
-                EndGame(false); // クリアせず終了
+                EndGame(false);
             }
         }
 
@@ -264,8 +336,8 @@ public class GameManager : MonoBehaviour
 
         string selectedColorName;
 
-        // modeが1なら2番目（index=1）を優先表示。存在しない場合はフォールバックでランダム。
-        if (mode == 1 && selectedCardData.colorNames.Count > 1)
+        // 2番目（index=1）を優先表示。存在しない場合はフォールバックでランダム。
+        if (selectedCardData.colorNames.Count > 1)
         {
             selectedColorName = selectedCardData.colorNames[1];
         }
@@ -276,7 +348,7 @@ public class GameManager : MonoBehaviour
         }
 
         Debug.Log($"正解に選ばれた色名: {selectedColorName}");
-        colorNameText.text = selectedColorName; // ランダムに選ばれた色名を表示
+        colorNameText.text = selectedColorName; // 2番目の色名を表示
         return keys[randomCardIndex];
     }
 
@@ -299,21 +371,19 @@ public class GameManager : MonoBehaviour
     {
         if (gameEnded) return;
 
-        // 現在スコア取得（安全に）
         int baseScore = 0;
         int.TryParse(scoreText.text, out baseScore);
 
-        totalScore = baseScore; // ゲーム中のスコアを基に
+        totalScore = baseScore;
 
         if (clearedAll)
         {
-            // 残り秒をボーナス（切り上げ）
-            int bonusSeconds = Mathf.CeilToInt(Mathf.Max(0f, timeRemaining));
-            totalScore += bonusSeconds; // 残り秒を加算したスコアをtotalScore変数に格納
+            int bonusSeconds = (mode == 1) ? 0 : Mathf.CeilToInt(Mathf.Max(0f, timeRemaining));
+            totalScore += bonusSeconds;
             Debug.Log($"全カードクリア。残り秒ボーナス: {bonusSeconds} -> 最終スコア: {totalScore}");
-            // タイマーを停止し、残り時間を表示したままにする
             isTimerRunning = false;
-            UpdateTimerText(); // 現在の残り時間を表示
+            if (mode != 1) UpdateTimerText();
+            else if (timerText != null) timerText.text = "";
         }
         else
         {
@@ -321,19 +391,22 @@ public class GameManager : MonoBehaviour
             if (timerText != null) timerText.text = "00:00";
         }
 
+        if (mode != 1)
+        {
+            if (TimeScoreText != null) TimeScoreText.text = "Time Score: " + ((mode == 1) ? "0" : Mathf.CeilToInt(Mathf.Max(0f, timeRemaining)).ToString());
+            if (CardScoreText != null) CardScoreText.text = "Card Score: " + baseScore.ToString();
+            if (totalScoreText != null) totalScoreText.text = "Total Score: " + totalScore.ToString();
+        }
+        else
+        {
+            // mode==1のときはscoreTextのみ "Score: " を付けて表示
+            if (scoreText != null) scoreText.text = "Score: " + baseScore.ToString();
+            if (TimeScoreText != null) TimeScoreText.text = "";
+            if (CardScoreText != null) CardScoreText.text = "";
+            if (totalScoreText != null) totalScoreText.text = "";
+        }
 
-        ////
-        if (TimeScoreText != null) TimeScoreText.text = "Time Score: " + Mathf.CeilToInt(Mathf.Max(0f, timeRemaining)).ToString();
-
-        if (CardScoreText != null) CardScoreText.text = "Card Score: " + baseScore.ToString();
-
-        // 総合スコアをtotalScoreTextに表示（ゲーム中のscoreTextは変更せず）
-        if (totalScoreText != null) totalScoreText.text = "Total Score: " + totalScore.ToString();
-
-
-        // ゲーム終了フラグ・停止処理
         gameEnded = true;
-
         // 必要ならここで結果画面遷移やリザルト処理を呼ぶ
         // ShowResult(totalScore, clearedAll);
     }
